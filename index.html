@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Happy 3rd Anniversary, My Ladduuu! ❤️</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Playfair+Display:ital,wght@0,500;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+
+    <style>
+        * {
+            -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: radial-gradient(circle at 50% 15%, #340924 0%, #190313 50%, #080108 100%);
+            color: #ffe4e6;
+            min-height: 100dvh;
+            overflow-x: hidden;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .font-cursive {
+            font-family: 'Alex Brush', cursive;
+        }
+
+        .font-serif-title {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Glassmorphism romantic envelope styling */
+        .glass-card {
+            background: linear-gradient(135deg, rgba(38, 12, 28, 0.82) 0%, rgba(19, 5, 14, 0.88) 100%);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(251, 113, 133, 0.28);
+            box-shadow: 0 15px 40px -10px rgba(225, 29, 72, 0.4), inset 0 0 25px rgba(244, 63, 94, 0.12);
+        }
+
+        /* Ambient floating light orbs */
+        .ambient-glow {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(95px);
+            pointer-events: none;
+            z-index: 0;
+            animation: pulseGlow 9s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            0% { transform: scale(1) translate(0, 0); opacity: 0.25; }
+            50% { transform: scale(1.18) translate(15px, -20px); opacity: 0.45; }
+            100% { transform: scale(0.92) translate(-15px, 20px); opacity: 0.28; }
+        }
+
+        /* Heartbeat pulsating */
+        @keyframes customPulse {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 12px rgba(244, 63, 94, 0.7)); }
+            50% { transform: scale(1.12); filter: drop-shadow(0 0 25px rgba(244, 63, 94, 1)); }
+        }
+        .animate-heartbeat {
+            animation: customPulse 1.6s infinite ease-in-out;
+        }
+
+        /* Smooth scroll for mobile reading */
+        .mobile-scroll {
+            scrollbar-width: thin;
+            scrollbar-color: #f43f5e rgba(40, 10, 25, 0.5);
+            -webkit-overflow-scrolling: touch;
+        }
+        .mobile-scroll::-webkit-scrollbar {
+            width: 5px;
+        }
+        .mobile-scroll::-webkit-scrollbar-thumb {
+            background: #f43f5e;
+            border-radius: 10px;
+        }
+
+        /* Shimmering text gradient */
+        .text-gold-gradient {
+            background: linear-gradient(135deg, #ffe4e6 0%, #fecdd3 30%, #fde047 70%, #f472b6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Prevent rubber-banding on canvas during touch drags */
+        canvas#bowCanvas {
+            touch-action: none;
+        }
+    </style>
+</head>
+<body class="relative flex flex-col items-center justify-center p-3 sm:p-6 overflow-x-hidden">
+
+    <!-- Glowing background lights -->
+    <div class="ambient-glow w-72 sm:w-96 h-72 sm:h-96 bg-rose-600 top-2 left-[-60px]"></div>
+    <div class="ambient-glow w-80 sm:w-[30rem] h-80 sm:h-[30rem] bg-pink-700 bottom-4 right-[-80px]" style="animation-delay: -3s;"></div>
+    <div class="ambient-glow w-64 h-64 bg-amber-500/25 top-1/2 left-1/4" style="animation-delay: -5s;"></div>
+
+    <!-- Fireworks & Floating Rose Petals Canvas -->
+    <canvas id="fireworksCanvas" class="fixed inset-0 pointer-events-none z-30 w-full h-full"></canvas>
+    <canvas id="petalsCanvas" class="fixed inset-0 pointer-events-none z-10 w-full h-full"></canvas>
+
+    <!-- Top Floating Sound & Info Bar (Mobile Friendly) -->
+    <header class="fixed top-2 sm:top-4 right-2 sm:right-4 z-40 flex items-center gap-2">
+        <button id="soundToggleBtn" aria-label="Toggle Sound" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-rose-950/80 border border-rose-400/40 text-rose-200 text-xs backdrop-blur-md shadow-lg active:scale-95 transition-all cursor-pointer">
+            <span id="soundIcon" class="text-sm">🔔</span>
+            <span id="soundText" class="font-medium">Music: On</span>
+        </button>
+    </header>
+
+    <!-- SCREEN 1: Interactive Bow & Arrow -->
+    <main id="bowScreen" class="relative z-20 flex flex-col items-center justify-center w-full max-w-lg text-center pt-8 pb-6 px-3 transition-all duration-700">
+        
+        <!-- Anniversary Timeline Badge -->
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-rose-500/15 border border-rose-400/35 text-rose-200 text-xs font-semibold mb-3 tracking-wider uppercase shadow-sm">
+            <span class="animate-pulse">✨</span>
+            <span>21 Oct 2023 ➔ 21 Oct 2026</span>
+            <span class="animate-pulse">✨</span>
+        </div>
+
+        <h1 class="font-serif-title text-2xl sm:text-4xl font-bold text-gold-gradient tracking-wide mb-1 leading-snug">
+            Happy 3rd Anniversary
+        </h1>
+        <p class="text-rose-200/90 text-xs sm:text-sm max-w-sm mx-auto mb-4 font-normal">
+            Cupid ka teer seedha Laddu ke dil par nishana lagane ke liye tayyar hai! Niche bow kheecho ya button dabao! 💘
+        </p>
+
+        <!-- Dynamic Counter Pills (Mobile Optimized Grid) -->
+        <div class="grid grid-cols-3 gap-2 w-full max-w-xs mb-4">
+            <div class="glass-card rounded-2xl py-2 px-1 text-center border border-rose-500/20">
+                <span class="block text-base sm:text-lg font-bold text-rose-300">3</span>
+                <span class="text-[10px] text-rose-200/70 uppercase tracking-tight">Years</span>
+            </div>
+            <div class="glass-card rounded-2xl py-2 px-1 text-center border border-rose-500/20">
+                <span class="block text-base sm:text-lg font-bold text-pink-300">36</span>
+                <span class="text-[10px] text-rose-200/70 uppercase tracking-tight">Months</span>
+            </div>
+            <div class="glass-card rounded-2xl py-2 px-1 text-center border border-rose-500/20">
+                <span class="block text-base sm:text-lg font-bold text-amber-300">1,096</span>
+                <span class="text-[10px] text-rose-200/70 uppercase tracking-tight">Days</span>
+            </div>
+        </div>
+
+        <!-- Interactive Bow Area -->
+        <div class="relative w-full max-w-sm h-72 sm:h-80 glass-card rounded-3xl border border-rose-400/30 flex flex-col items-center justify-center overflow-hidden shadow-2xl p-2 select-none">
+            
+            <!-- Target Heart at Top -->
+            <div id="targetHeart" class="absolute top-3 flex flex-col items-center transition-transform duration-300">
+                <div class="relative w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center">
+                    <svg viewBox="0 0 24 24" class="w-full h-full fill-rose-600 text-rose-500 animate-heartbeat">
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                    </svg>
+                    <span class="absolute text-[11px] font-extrabold text-white tracking-wider drop-shadow-md">LADDU ❤️</span>
+                </div>
+                <div class="text-[10px] text-rose-300/80 font-medium tracking-wide mt-0.5">TARGET HEART</div>
+            </div>
+
+            <!-- Bow Canvas Element -->
+            <canvas id="bowCanvas" width="360" height="230" class="w-full h-full cursor-grab active:cursor-grabbing z-10"></canvas>
+
+            <div class="absolute bottom-2 text-rose-300/70 text-[11px] sm:text-xs pointer-events-none flex items-center gap-1.5 animate-bounce">
+                <span>🏹</span>
+                <span>Peeche kheench kar chhoro (Pull & Release)</span>
+            </div>
+        </div>
+
+        <!-- Shoot Button with tactile feedback -->
+        <div class="mt-4 w-full max-w-sm flex flex-col gap-2">
+            <button id="shootBtn" class="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-rose-500 via-pink-600 to-rose-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold text-base shadow-lg shadow-rose-600/40 active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer border border-pink-300/40">
+                <span>🏹 Shoot Cupid's Arrow</span>
+                <span class="text-xl">💥</span>
+            </button>
+            <p class="text-[11px] text-rose-300/60 text-center">
+                Tip: Screen par direct drag karke bhi arrow release kar sakte ho!
+            </p>
+        </div>
+    </main>
+
+    <!-- SCREEN 2: Revealed Letter & Wishes (Hidden Initially) -->
+    <section id="letterScreen" class="relative z-30 w-full max-w-2xl my-3 sm:my-6 hidden opacity-0 transition-opacity duration-1000 px-2 sm:px-4">
+        
+        <article class="glass-card rounded-3xl p-4 sm:p-8 text-rose-50 border border-pink-400/40 relative overflow-hidden shadow-2xl">
+            
+            <!-- Corner filigree accents -->
+            <div class="absolute top-2 left-3 text-rose-400/40 text-xl font-serif">❦</div>
+            <div class="absolute top-2 right-3 text-rose-400/40 text-xl font-serif">❦</div>
+            <div class="absolute bottom-2 left-3 text-rose-400/40 text-xl font-serif">❦</div>
+            <div class="absolute bottom-2 right-3 text-rose-400/40 text-xl font-serif">❦</div>
+
+            <!-- Letter Header -->
+            <header class="text-center mb-5 pb-3 border-b border-rose-500/20">
+                <span class="inline-block px-3.5 py-1 rounded-full bg-gradient-to-r from-pink-500/20 via-rose-500/30 to-amber-500/20 border border-pink-400/30 text-pink-200 text-[11px] sm:text-xs font-semibold tracking-widest uppercase mb-2">
+                    ✨ 3 Magical Years Together • 2023 - 2026 ✨
+                </span>
+                
+                <h2 class="font-cursive text-3xl sm:text-5xl text-gold-gradient py-1 leading-tight">
+                    Happy 3 years of us, my Ladduuu! ❤️🥹🧿
+                </h2>
+                
+                <div class="flex items-center justify-center gap-2 text-rose-300 text-xs mt-1">
+                    <span class="h-[1px] w-8 sm:w-12 bg-rose-400/40"></span>
+                    <span>21st October 2023 ➔ 21st October 2026</span>
+                    <span class="h-[1px] w-8 sm:w-12 bg-rose-400/40"></span>
+                </div>
+            </header>
+
+            <!-- Heartfelt Letter Content (Mobile scrollable) -->
+            <div class="mobile-scroll max-h-[58vh] overflow-y-auto px-1 sm:px-3 py-1 space-y-3.5 text-xs sm:text-[15px] leading-relaxed text-rose-100/90 font-normal">
+                
+                <div class="p-3.5 rounded-2xl bg-rose-950/50 border border-rose-500/20 shadow-inner">
+                    <p class="font-medium text-rose-100">
+                        <strong class="text-rose-300 font-semibold text-sm sm:text-base block mb-1">21st October 2023…</strong>
+                        the day we started our little love story, and today, <strong>21st October 2026</strong>, we're already 3 years into it. Pata hi nahi chala kab ye 3 saal beet gaye, kab tum meri aadat se meri zaroorat ban gaye, aur kab tum meri life ka itna important part ban gaye ki ab har khushi, har chhoti si baat, har future plan mein bas tum hi tum dikhte ho. ❤️
+                    </p>
+                </div>
+
+                <p>
+                    Laddu, honestly, mujhe nahi pata ki main tumhe kabhi words mein samjha bhi paunga ya nahi ki tum mere liye kitne special ho. Tumhare saath sirf pyaar nahi mila mujhe, ek alag sa sukoon mila hai, ek apnapan mila hai, ek aisa insaan mila hai jiske saamne main bina soche samjhe apna real self reh sakta hoon. Tumhare saath normal se normal din bhi special lagta hai, aur kabhi kabhi bas tumse baat kar lena hi mere poore din ko achha bana deta hai. 🫶🏻
+                </p>
+
+                <p class="border-l-2 border-pink-400/70 pl-3 italic text-rose-200/95 bg-rose-900/15 py-1.5 rounded-r-xl">
+                    In 3 saalon mein humne bahut saari memories banayi hain, bahut hase hain, kabhi lade hain, kabhi ek dusre ko manaya hai, kabhi chhoti chhoti baaton pe gussa hue hain, aur kabhi bina kuch kahe ek dusre ko samjha bhi hai. Har din perfect nahi raha hoga, hum bhi perfect nahi hain, but I think pyaar ki sabse khoobsurat baat yahi hai ki perfect hone ki zaroorat nahi hoti, bas ek dusre ka saath nahi chhodna chahiye. Aur main chahta hoon ki chahe life mein kitne bhi ups and downs aayein, hum hamesha ek dusre ka haath pakad ke un sabko paar karein. ❤️‍🩹
+                </p>
+
+                <p>
+                    Thank you, Laddu, meri life mein aane ke liye, mujhe itna pyaar dene ke liye, meri stupid baatein sunne ke liye, mujhe tolerate karne ke liye 😂❤️, aur meri life ke itne saare moments ka part banne ke liye. Thank you for being you. Tumhe shayad khud bhi nahi pata ki tumhari presence mere liye kitni matter karti hai. Main bas chahta hoon ki tum hamesha khush raho, tumhare saare dreams poore hon, aur main tumhare saath rahun jab tum apni life ki har ek achievement celebrate karo. Aur jab kabhi life difficult ho, tab bhi main tumhare paas rahun, taaki tumhe kabhi aisa na lage ki tum akele ho.
+                </p>
+
+                <div class="p-3.5 rounded-2xl bg-gradient-to-r from-rose-900/40 via-pink-900/30 to-rose-950/40 border border-pink-400/25">
+                    <p class="font-medium text-rose-100">
+                        Aur suno, mujhe sirf aaj ke liye tum nahi chahiye. Mujhe tum aane wale har saal mein chahiye. Har anniversary pe, har birthday pe, har random Tuesday ko, har late-night conversation mein, har chhoti si fight ke baad, har naye adventure mein. Mujhe tumhare saath aur memories banani hain, tumhare saath grow karna hai, tumhare saath life ke naye chapters likhne hain. Aaj ke humse lekar future ke hum tak, I want to keep choosing you, again and again. 🥹❤️
+                    </p>
+                </div>
+
+                <p>
+                    I don't know ki future mein hamare liye kya kya likha hai, but ek cheez dil se chahta hoon ki jab bhi hum peeche mudkar apni story dekhein, toh humein lage ki haan, humne ek dusre ko sirf pyaar hi nahi kiya, balki har phase mein ek dusre ko samjha, sambhala aur choose bhi kiya.
+                </p>
+
+                <div class="text-center py-3 my-1 border-y border-rose-500/25 bg-rose-950/30 rounded-xl">
+                    <p class="text-lg sm:text-xl font-serif-title font-semibold text-rose-300 tracking-wide">
+                        3 years down, and a lifetime of memories to go. ♾️❤️
+                    </p>
+                </div>
+
+                <p>
+                    Happy Anniversary, meri jaan, mera Laddu, my favourite person, my home. Thank you for making these 3 years a part of my life that I'll always cherish. Agar mujhe phir se 21st October 2023 pe jaane ka mauka mile na, toh main phir se tumhe hi choose karunga, bina kisi second thought ke. Because it's you, Laddu. It has always been you. ❤️🧿
+                </p>
+
+                <p class="font-semibold text-rose-200 text-sm sm:text-base pt-1">
+                    I love you more than these words can ever explain. Aaj bhi, kal bhi, aur har uss din bhi jo abhi humne saath mein jeena baaki hai. Happy 3rd Anniversary, Ladduuu! 🥹💗🫂
+                </p>
+            </div>
+
+            <!-- Bottom Interactive Controls for Mobile -->
+            <footer class="mt-4 pt-3 border-t border-rose-500/25 flex flex-col sm:flex-row items-center justify-between gap-2.5">
+                <button id="re-celebrateBtn" class="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-gradient-to-r from-rose-700/80 to-pink-700/80 hover:brightness-110 border border-rose-400/40 text-rose-100 text-xs font-semibold transition active:scale-95 cursor-pointer flex items-center justify-center gap-1.5 shadow-md">
+                    <span>🎆 Burst Crackers</span>
+                </button>
+                
+                <div class="w-full sm:w-auto grid grid-cols-3 sm:flex items-center gap-2">
+                    <button id="shareWhatsappBtn" class="px-3 py-2.5 rounded-xl bg-emerald-800/70 hover:bg-emerald-700 border border-emerald-400/40 text-emerald-100 text-xs font-medium transition active:scale-95 cursor-pointer flex items-center justify-center gap-1">
+                        <span>💬</span>
+                        <span class="hidden xs:inline">WhatsApp</span>
+                        <span class="xs:hidden">Share</span>
+                    </button>
+                    <button id="copyLetterBtn" class="px-3 py-2.5 rounded-xl bg-pink-700/70 hover:bg-pink-600 border border-pink-400/40 text-white text-xs font-medium transition active:scale-95 cursor-pointer flex items-center justify-center gap-1">
+                        <span>📋</span>
+                        <span id="copyBtnText">Copy</span>
+                    </button>
+                    <button id="replayBowBtn" class="px-3 py-2.5 rounded-xl bg-rose-950 hover:bg-rose-900 border border-rose-600/60 text-rose-200 text-xs transition active:scale-95 cursor-pointer flex items-center justify-center gap-1">
+                        <span>🏹</span>
+                        <span>Replay</span>
+                    </button>
+                </div>
+            </footer>
+
+            <!-- Toast notification -->
+            <div id="toastMessage" class="hidden absolute top-3 left-1/2 -translate-x-1/2 bg-rose-950/95 border border-pink-400 text-pink-200 px-4 py-2 rounded-full text-xs font-medium shadow-2xl z-50 backdrop-blur-md transition-all">
+                Wish copied! Laddu ke saath share karo! ❤️
+            </div>
+        </article>
+    </section>
+
+    <script>
+        /* --- AUDIO & HAPTIC FEEDBACK ENGINE --- */
+        let audioStarted = false;
+        let isMuted = false;
+        let ambientSynth, crackerSynth, chimeSynth;
+
+        function triggerVibration(pattern) {
+            if ("vibrate" in navigator) {
+                try {
+                    navigator.vibrate(pattern);
+                } catch(e) {}
+            }
+        }
+
+        function initAudio() {
+            if (audioStarted) return;
+            try {
+                Tone.start();
+                audioStarted = true;
+
+                // Ambient melodic chord synthesizer
+                ambientSynth = new Tone.PolySynth(Tone.Synth, {
+                    oscillator: { type: 'sine' },
+                    envelope: { attack: 1.2, decay: 2, sustain: 0.6, release: 2.5 }
+                }).toDestination();
+                ambientSynth.volume.value = -19;
+
+                // Cracker burst noise synth
+                crackerSynth = new Tone.NoiseSynth({
+                    noise: { type: 'pink' },
+                    envelope: { attack: 0.005, decay: 0.32, sustain: 0 }
+                }).toDestination();
+                crackerSynth.volume.value = -9;
+
+                // Bell / sparkle chimes
+                chimeSynth = new Tone.PolySynth(Tone.Synth, {
+                    oscillator: { type: 'triangle' },
+                    envelope: { attack: 0.01, decay: 0.4, sustain: 0.1, release: 1 }
+                }).toDestination();
+                chimeSynth.volume.value = -13;
+
+                startRomanticMelody();
+            } catch (e) {
+                console.log("Audio started on interaction");
+            }
+        }
+
+        const chordProgression = [
+            ["C4", "E4", "G4", "B4"],
+            ["A3", "C4", "E4", "G4"],
+            ["F3", "A3", "C4", "E4"],
+            ["G3", "B3", "D4", "F4"]
+        ];
+        let chordIdx = 0;
+
+        function startRomanticMelody() {
+            if (isMuted || !ambientSynth) return;
+            setInterval(() => {
+                if (!isMuted && ambientSynth && audioStarted) {
+                    ambientSynth.triggerAttackRelease(chordProgression[chordIdx % chordProgression.length], "2n");
+                    chordIdx++;
+                }
+            }, 3200);
+        }
+
+        function playArrowWhoosh() {
+            if (isMuted || !Tone || !Tone.Synth) return;
+            try {
+                const whoosh = new Tone.Synth({
+                    oscillator: { type: 'sine' },
+                    envelope: { attack: 0.01, decay: 0.18, sustain: 0 }
+                }).toDestination();
+                whoosh.volume.value = -8;
+                whoosh.triggerAttackRelease("A5", "16n");
+            } catch (err) {}
+        }
+
+        function playFirecrackerSound() {
+            if (isMuted || !audioStarted) return;
+            try {
+                if (crackerSynth) crackerSynth.triggerAttackRelease("8n");
+                if (chimeSynth) {
+                    const notes = ["D5", "G5", "B5", "D6"];
+                    const picked = notes[Math.floor(Math.random() * notes.length)];
+                    chimeSynth.triggerAttackRelease(picked, "8n");
+                }
+            } catch(e) {}
+        }
+
+        /* --- SOUND TOGGLE --- */
+        const soundToggleBtn = document.getElementById('soundToggleBtn');
+        const soundIcon = document.getElementById('soundIcon');
+        const soundText = document.getElementById('soundText');
+
+        soundToggleBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            initAudio();
+            isMuted = !isMuted;
+            if (isMuted) {
+                soundIcon.textContent = "🔕";
+                soundText.textContent = "Music: Off";
+                if (ambientSynth) ambientSynth.volume.value = -100;
+            } else {
+                soundIcon.textContent = "🔔";
+                soundText.textContent = "Music: On";
+                if (ambientSynth) ambientSynth.volume.value = -19;
+            }
+        });
+
+        /* --- BOW AND ARROW CANVAS LOGIC --- */
+        const bowCanvas = document.getElementById('bowCanvas');
+        const bCtx = bowCanvas.getContext('2d');
+
+        function setupBowCanvas() {
+            const rect = bowCanvas.getBoundingClientRect();
+            // High DPI support for crisp visuals on mobile
+            const dpr = window.devicePixelRatio || 1;
+            bowCanvas.width = rect.width * dpr;
+            bowCanvas.height = rect.height * dpr;
+            bCtx.scale(dpr, dpr);
+        }
+        setupBowCanvas();
+        window.addEventListener('resize', setupBowCanvas);
+
+        function getBowMetrics() {
+            const rect = bowCanvas.getBoundingClientRect();
+            return {
+                width: rect.width,
+                height: rect.height,
+                centerX: rect.width / 2,
+                centerY: rect.height - 40,
+                radius: Math.min(rect.width * 0.22, 65)
+            };
+        }
+
+        let m = getBowMetrics();
+        let stringPull = { x: m.centerX, y: m.centerY };
+        let isDragging = false;
+        let isArrowInFlight = false;
+        let flightArrow = null;
+
+        function drawBowAndString() {
+            m = getBowMetrics();
+            bCtx.clearRect(0, 0, m.width, m.height);
+
+            const arcY = m.centerY - 10;
+
+            // 1. Glowing Bow Arc
+            bCtx.save();
+            bCtx.beginPath();
+            bCtx.lineWidth = 5;
+            bCtx.strokeStyle = '#f43f5e';
+            bCtx.shadowColor = '#fb7185';
+            bCtx.shadowBlur = 12;
+            bCtx.arc(m.centerX, arcY, m.radius, Math.PI * 0.15, Math.PI * 0.85, false);
+            bCtx.stroke();
+            bCtx.restore();
+
+            // End Tips
+            const leftTipX = m.centerX - Math.cos(Math.PI * 0.15) * m.radius;
+            const leftTipY = arcY + Math.sin(Math.PI * 0.15) * m.radius;
+            const rightTipX = m.centerX + Math.cos(Math.PI * 0.15) * m.radius;
+            const rightTipY = arcY + Math.sin(Math.PI * 0.15) * m.radius;
+
+            drawTipGlow(leftTipX, leftTipY);
+            drawTipGlow(rightTipX, rightTipY);
+
+            // 2. Bow String
+            bCtx.beginPath();
+            bCtx.lineWidth = 2.5;
+            bCtx.strokeStyle = '#fce7f3';
+            bCtx.moveTo(leftTipX, leftTipY);
+            bCtx.lineTo(stringPull.x, stringPull.y);
+            bCtx.lineTo(rightTipX, rightTipY);
+            bCtx.stroke();
+
+            // 3. Arrow resting on string
+            if (!isArrowInFlight) {
+                drawArrow(stringPull.x, stringPull.y - 4, stringPull.x, stringPull.y - 68);
+            }
+        }
+
+        function drawTipGlow(x, y) {
+            bCtx.save();
+            bCtx.fillStyle = '#fde047';
+            bCtx.shadowColor = '#f59e0b';
+            bCtx.shadowBlur = 8;
+            bCtx.beginPath();
+            bCtx.arc(x, y, 4.5, 0, Math.PI * 2);
+            bCtx.fill();
+            bCtx.restore();
+        }
+
+        function drawArrow(startX, startY, headX, headY) {
+            bCtx.save();
+            bCtx.beginPath();
+            bCtx.lineWidth = 3.5;
+            bCtx.strokeStyle = '#fef08a';
+            bCtx.shadowColor = '#f43f5e';
+            bCtx.shadowBlur = 10;
+            bCtx.moveTo(startX, startY);
+            bCtx.lineTo(headX, headY);
+            bCtx.stroke();
+
+            // Heart Head of the Arrow
+            bCtx.fillStyle = '#e11d48';
+            bCtx.beginPath();
+            const sz = 10;
+            bCtx.moveTo(headX, headY);
+            bCtx.bezierCurveTo(headX - sz, headY - sz, headX - sz * 1.5, headY + sz / 2, headX, headY + sz * 1.4);
+            bCtx.bezierCurveTo(headX + sz * 1.5, headY + sz / 2, headX + sz, headY - sz, headX, headY);
+            bCtx.fill();
+
+            // Golden fletching knot
+            bCtx.fillStyle = '#f59e0b';
+            bCtx.beginPath();
+            bCtx.arc(startX, startY, 3.5, 0, Math.PI * 2);
+            bCtx.fill();
+            bCtx.restore();
+        }
+
+        function getPointerPos(e) {
+            const rect = bowCanvas.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            return {
+                x: clientX - rect.left,
+                y: clientY - rect.top
+            };
+        }
+
+        function onPointerStart(e) {
+            if (isArrowInFlight) return;
+            initAudio();
+            const p = getPointerPos(e);
+            m = getBowMetrics();
+            if (Math.abs(p.x - stringPull.x) < 60 && Math.abs(p.y - stringPull.y) < 60) {
+                isDragging = true;
+                triggerVibration(15);
+            }
+        }
+
+        function onPointerDrag(e) {
+            if (!isDragging || isArrowInFlight) return;
+            const p = getPointerPos(e);
+            m = getBowMetrics();
+            stringPull.x = Math.max(m.centerX - 35, Math.min(m.centerX + 35, p.x));
+            stringPull.y = Math.max(m.centerY, Math.min(m.centerY + 55, p.y));
+            drawBowAndString();
+        }
+
+        function onPointerRelease() {
+            if (!isDragging) return;
+            isDragging = false;
+            m = getBowMetrics();
+            const pullDistance = stringPull.y - m.centerY;
+            if (pullDistance > 16) {
+                triggerArrowFlight();
+            } else {
+                stringPull = { x: m.centerX, y: m.centerY };
+                drawBowAndString();
+            }
+        }
+
+        bowCanvas.addEventListener('mousedown', onPointerStart);
+        window.addEventListener('mousemove', onPointerDrag);
+        window.addEventListener('mouseup', onPointerRelease);
+
+        bowCanvas.addEventListener('touchstart', onPointerStart, { passive: true });
+        window.addEventListener('touchmove', onPointerDrag, { passive: true });
+        window.addEventListener('touchend', onPointerRelease);
+
+        function triggerArrowFlight() {
+            if (isArrowInFlight) return;
+            initAudio();
+            isArrowInFlight = true;
+            playArrowWhoosh();
+            triggerVibration([25, 40]);
+
+            flightArrow = {
+                x: stringPull.x,
+                y: stringPull.y - 10,
+                vy: -14,
+                length: 60
+            };
+
+            // Spring back string
+            let step = 0;
+            const snapBack = setInterval(() => {
+                step++;
+                m = getBowMetrics();
+                stringPull.y += (m.centerY - stringPull.y) * 0.45;
+                stringPull.x += (m.centerX - stringPull.x) * 0.45;
+                if (step > 8) {
+                    stringPull.x = m.centerX;
+                    stringPull.y = m.centerY;
+                    clearInterval(snapBack);
+                }
+            }, 25);
+
+            animateArrow();
+        }
+
+        function animateArrow() {
+            if (!isArrowInFlight || !flightArrow) return;
+            flightArrow.y += flightArrow.vy;
+            flightArrow.vy -= 0.6; // Accelerate
+
+            drawBowAndString();
+            drawArrow(flightArrow.x, flightArrow.y + flightArrow.length, flightArrow.x, flightArrow.y);
+
+            // Reached target boundary
+            if (flightArrow.y <= 12) {
+                isArrowInFlight = false;
+                flightArrow = null;
+                onTargetHit();
+                return;
+            }
+            requestAnimationFrame(animateArrow);
+        }
+
+        // Shoot Button Click Handler
+        const shootBtn = document.getElementById('shootBtn');
+        shootBtn.addEventListener('click', () => {
+            if (isArrowInFlight) return;
+            initAudio();
+            m = getBowMetrics();
+            stringPull.y = m.centerY + 45;
+            drawBowAndString();
+            setTimeout(() => {
+                triggerArrowFlight();
+            }, 100);
+        });
+
+        // Initial Canvas Draw
+        m = getBowMetrics();
+        stringPull = { x: m.centerX, y: m.centerY };
+        drawBowAndString();
+
+        /* --- FIREWORKS / CRACKERS SYSTEM --- */
+        const fCanvas = document.getElementById('fireworksCanvas');
+        const fCtx = fCanvas.getContext('2d');
+        let particles = [];
+
+        function resizeFireworks() {
+            fCanvas.width = window.innerWidth;
+            fCanvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeFireworks);
+        resizeFireworks();
+
+        class Particle {
+            constructor(x, y, color, isSpark = false) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                const angle = Math.random() * Math.PI * 2;
+                const speed = isSpark ? (Math.random() * 7 + 3) : (Math.random() * 4.5 + 2);
+                this.vx = Math.cos(angle) * speed;
+                this.vy = Math.sin(angle) * speed;
+                this.alpha = 1;
+                this.decay = Math.random() * 0.018 + 0.014;
+                this.gravity = 0.14;
+                this.size = Math.random() * 2.8 + 2;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.vy += this.gravity;
+                this.alpha -= this.decay;
+            }
+
+            draw(ctx) {
+                ctx.save();
+                ctx.globalAlpha = Math.max(0, this.alpha);
+                ctx.fillStyle = this.color;
+                ctx.shadowColor = this.color;
+                ctx.shadowBlur = 8;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        function createCrackerBurst(x, y) {
+            playFirecrackerSound();
+            const colors = ['#f43f5e', '#fb7185', '#fbbf24', '#f472b6', '#38bdf8', '#c084fc', '#ffffff', '#fb923c'];
+            const burstColor = colors[Math.floor(Math.random() * colors.length)];
+            const particleCount = 45; // balanced for mobile performance
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle(x, y, burstColor, true));
+            }
+        }
+
+        function createHeartFirework(cx, cy) {
+            playFirecrackerSound();
+            const color = '#f43f5e';
+            const count = 42;
+            for (let i = 0; i < count; i++) {
+                const t = (Math.PI * 2 / count) * i;
+                const hx = 16 * Math.pow(Math.sin(t), 3);
+                const hy = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
+                const p = new Particle(cx, cy, color);
+                p.vx = hx * 0.28;
+                p.vy = hy * 0.28;
+                p.size = 3;
+                particles.push(p);
+            }
+        }
+
+        function loopFireworks() {
+            fCtx.clearRect(0, 0, fCanvas.width, fCanvas.height);
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const p = particles[i];
+                p.update();
+                p.draw(fCtx);
+                if (p.alpha <= 0) {
+                    particles.splice(i, 1);
+                }
+            }
+            requestAnimationFrame(loopFireworks);
+        }
+        loopFireworks();
+
+        /* --- TARGET HIT & SCREEN TRANSITION --- */
+        const bowScreen = document.getElementById('bowScreen');
+        const letterScreen = document.getElementById('letterScreen');
+        const targetHeart = document.getElementById('targetHeart');
+
+        function onTargetHit() {
+            triggerVibration([50, 60, 100]);
+
+            // Shake & glow heart
+            targetHeart.classList.add('scale-125');
+            setTimeout(() => targetHeart.classList.remove('scale-125'), 350);
+
+            const rect = targetHeart.getBoundingClientRect();
+            const burstX = rect.left + rect.width / 2;
+            const burstY = rect.top + rect.height / 2;
+
+            createHeartFirework(burstX, burstY);
+            createCrackerBurst(burstX, burstY);
+
+            // Grand burst sequence across screen
+            let burstCount = 0;
+            const fireworkInterval = setInterval(() => {
+                const rx = Math.random() * (window.innerWidth * 0.8) + (window.innerWidth * 0.1);
+                const ry = Math.random() * (window.innerHeight * 0.45) + 60;
+                if (Math.random() > 0.4) {
+                    createCrackerBurst(rx, ry);
+                } else {
+                    createHeartFirework(rx, ry);
+                }
+                burstCount++;
+                if (burstCount > 10) clearInterval(fireworkInterval);
+            }, 240);
+
+            // Smooth transition to Romantic Letter
+            setTimeout(() => {
+                bowScreen.classList.add('opacity-0', 'scale-95', 'pointer-events-none');
+                setTimeout(() => {
+                    bowScreen.style.display = 'none';
+                    letterScreen.classList.remove('hidden');
+                    void letterScreen.offsetWidth;
+                    letterScreen.classList.remove('opacity-0');
+                    letterScreen.classList.add('opacity-100');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }, 500);
+            }, 1000);
+        }
+
+        /* --- BURST MORE CRACKERS BUTTON --- */
+        document.getElementById('re-celebrateBtn').addEventListener('click', () => {
+            initAudio();
+            triggerVibration(40);
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    const rx = Math.random() * (window.innerWidth * 0.8) + (window.innerWidth * 0.1);
+                    const ry = Math.random() * (window.innerHeight * 0.45) + 60;
+                    if (i % 2 === 0) {
+                        createHeartFirework(rx, ry);
+                    } else {
+                        createCrackerBurst(rx, ry);
+                    }
+                }, i * 200);
+            }
+        });
+
+        /* --- REPLAY BOW BUTTON --- */
+        document.getElementById('replayBowBtn').addEventListener('click', () => {
+            letterScreen.classList.add('opacity-0');
+            setTimeout(() => {
+                letterScreen.classList.add('hidden');
+                bowScreen.style.display = 'flex';
+                void bowScreen.offsetWidth;
+                bowScreen.classList.remove('opacity-0', 'scale-95', 'pointer-events-none');
+                isArrowInFlight = false;
+                m = getBowMetrics();
+                stringPull = { x: m.centerX, y: m.centerY };
+                drawBowAndString();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 450);
+        });
+
+        /* --- FLOATING ROSE PETALS CANVAS --- */
+        const pCanvas = document.getElementById('petalsCanvas');
+        const pCtx = pCanvas.getContext('2d');
+        let petals = [];
+
+        function resizePetals() {
+            pCanvas.width = window.innerWidth;
+            pCanvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizePetals);
+        resizePetals();
+
+        class Petal {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * pCanvas.width;
+                this.y = -20;
+                this.size = Math.random() * 7 + 5;
+                this.speedY = Math.random() * 1.1 + 0.7;
+                this.speedX = Math.random() * 1.2 - 0.6;
+                this.rotation = Math.random() * 360;
+                this.rotSpeed = (Math.random() - 0.5) * 1.8;
+                this.opacity = Math.random() * 0.45 + 0.25;
+                this.color = Math.random() > 0.35 ? '#f43f5e' : '#fda4af';
+            }
+            update() {
+                this.y += this.speedY;
+                this.x += Math.sin(this.y * 0.02) + this.speedX;
+                this.rotation += this.rotSpeed;
+                if (this.y > pCanvas.height + 20) {
+                    this.reset();
+                }
+            }
+            draw(ctx) {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate((this.rotation * Math.PI) / 180);
+                ctx.globalAlpha = this.opacity;
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                ctx.bezierCurveTo(this.size, -this.size / 2, this.size * 1.2, this.size, 0, this.size * 1.4);
+                ctx.bezierCurveTo(-this.size * 1.2, this.size, -this.size, -this.size / 2, 0, 0);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        // 25 lightweight petals optimized for mobile battery
+        for (let i = 0; i < 25; i++) {
+            const p = new Petal();
+            p.y = Math.random() * pCanvas.height;
+            petals.push(p);
+        }
+
+        function loopPetals() {
+            pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
+            for (let i = 0; i < petals.length; i++) {
+                petals[i].update();
+                petals[i].draw(pCtx);
+            }
+            requestAnimationFrame(loopPetals);
+        }
+        loopPetals();
+
+        /* --- COPY & WHATSAPP SHARING LOGIC --- */
+        const copyBtn = document.getElementById('copyLetterBtn');
+        const copyBtnText = document.getElementById('copyBtnText');
+        const shareWhatsappBtn = document.getElementById('shareWhatsappBtn');
+        const toastMessage = document.getElementById('toastMessage');
+
+        const anniversaryWish = `Happy 3 years of us, my Ladduuu! ❤️🥹🧿
+21st October 2023… the day we started our little love story, and today, 21st October 2026, we're already 3 years into it. Pata hi nahi chala kab ye 3 saal beet gaye, kab tum meri aadat se meri zaroorat ban gaye, aur kab tum meri life ka itna important part ban gaye ki ab har khushi, har chhoti si baat, har future plan mein bas tum hi tum dikhte ho. ❤️
+Laddu, honestly, mujhe nahi pata ki main tumhe kabhi words mein samjha bhi paunga ya nahi ki tum mere liye kitne special ho. Tumhare saath sirf pyaar nahi mila mujhe, ek alag sa sukoon mila hai, ek apnapan mila hai, ek aisa insaan mila hai jiske saamne main bina soche samjhe apna real self reh sakta hoon. Tumhare saath normal se normal din bhi special lagta hai, aur kabhi kabhi bas tumse baat kar lena hi mere poore din ko achha bana deta hai. 🫶🏻
+In 3 saalon mein humne bahut saari memories banayi hain, bahut hase hain, kabhi lade hain, kabhi ek dusre ko manaya hai, kabhi chhoti chhoti baaton pe gussa hue hain, aur kabhi bina kuch kahe ek dusre ko samjha bhi hai. Har din perfect nahi raha hoga, hum bhi perfect nahi hain, but I think pyaar ki sabse khoobsurat baat yahi hai ki perfect hone ki zaroorat nahi hoti, bas ek dusre ka saath nahi chhodna chahiye. Aur main chahta hoon ki chahe life mein kitne bhi ups and downs aayein, hum hamesha ek dusre ka haath pakad ke un sabko paar karein. ❤️‍🩹
+Thank you, Laddu, meri life mein aane ke liye, mujhe itna pyaar dene ke liye, meri stupid baatein sunne ke liye, mujhe tolerate karne ke liye 😂❤️, aur meri life ke itne saare moments ka part banne ke liye. Thank you for being you. Tumhe shayad khud bhi nahi pata ki tumhari presence mere liye kitni matter karti hai. Main bas chahta hoon ki tum hamesha khush raho, tumhare saare dreams poore hon, aur main tumhare saath rahun jab tum apni life ki har ek achievement celebrate karo. Aur jab kabhi life difficult ho, tab bhi main tumhare paas rahun, taaki tumhe kabhi aisa na lage ki tum akele ho.
+Aur suno, mujhe sirf aaj ke liye tum nahi chahiye. Mujhe tum aane wale har saal mein chahiye. Har anniversary pe, har birthday pe, har random Tuesday ko, har late-night conversation mein, har chhoti si fight ke baad, har naye adventure mein. Mujhe tumhare saath aur memories banani hain, tumhare saath grow karna hai, tumhare saath life ke naye chapters likhne hain. Aaj ke humse lekar future ke hum tak, I want to keep choosing you, again and again. 🥹❤️
+I don't know ki future mein hamare liye kya kya likha hai, but ek cheez dil se chahta hoon ki jab bhi hum peeche mudkar apni story dekhein, toh humein lage ki haan, humne ek dusre ko sirf pyaar hi nahi kiya, balki har phase mein ek dusre ko samjha, sambhala aur choose bhi kiya.
+3 years down, and a lifetime of memories to go. ♾️❤️
+Happy Anniversary, meri jaan, mera Laddu, my favourite person, my home. Thank you for making these 3 years a part of my life that I'll always cherish. Agar mujhe phir se 21st October 2023 pe jaane ka mauka mile na, toh main phir se tumhe hi choose karunga, bina kisi second thought ke. Because it's you, Laddu. It has always been you. ❤️🧿
+I love you more than these words can ever explain. Aaj bhi, kal bhi, aur har uss din bhi jo abhi humne saath mein jeena baaki hai. Happy 3rd Anniversary, Ladduuu! 🥹💗🫂`;
+
+        copyBtn.addEventListener('click', () => {
+            const temp = document.createElement('textarea');
+            temp.value = anniversaryWish;
+            temp.style.position = 'fixed';
+            temp.style.top = '-9999px';
+            document.body.appendChild(temp);
+            temp.focus();
+            temp.select();
+            try {
+                document.execCommand('copy');
+                copyBtnText.textContent = "Copied! ❤️";
+                toastMessage.classList.remove('hidden');
+                triggerVibration(30);
+                setTimeout(() => {
+                    copyBtnText.textContent = "Copy";
+                    toastMessage.classList.add('hidden');
+                }, 2800);
+            } catch (e) {
+                console.error('Copy failed', e);
+            }
+            document.body.removeChild(temp);
+        });
+
+        // WhatsApp direct share for mobile convenience
+        shareWhatsappBtn.addEventListener('click', () => {
+            initAudio();
+            const encoded = encodeURIComponent(anniversaryWish);
+            window.open(`https://api.whatsapp.com/send?text=${encoded}`, '_blank');
+        });
+
+        // Unlock audio on first touch/click
+        window.addEventListener('click', () => {
+            if (!audioStarted) initAudio();
+        }, { once: true });
+        window.addEventListener('touchstart', () => {
+            if (!audioStarted) initAudio();
+        }, { once: true });
+    </script>
+</body>
+</html>
